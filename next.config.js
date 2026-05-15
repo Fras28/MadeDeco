@@ -1,11 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
-  },
-  images: {
-    domains: ['madedeco.com.ar', 'acdn-us.mitiendanube.com'],
-  },
+  // Necesario para que Prisma funcione en Next.js App Router
+  serverExternalPackages: ['@prisma/client', 'prisma'],
 }
 
 module.exports = nextConfig

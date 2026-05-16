@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import AdminNav from '@/components/AdminNav'
 import Link from 'next/link'
+import DachshundIcon from '@/components/DachshundIcon'
 
 interface CustomerData {
   name:               string
@@ -347,12 +348,7 @@ export default function ScanPage() {
                         style={filled ? { animationDelay: `${i * 0.04}s` } : {}}
                       >
                         {filled && (
-                          <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
-                            {initial
-                              ? <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" fill="white" opacity="0.9" />
-                              : <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                            }
-                          </svg>
+                          <DachshundIcon variant={initial ? 'dark' : 'light'} />
                         )}
                         {!filled && <span className="text-brand-200 text-xs">{i + 1}</span>}
                       </div>

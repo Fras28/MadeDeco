@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router       = useRouter()
   const searchParams = useSearchParams()
   const redirect     = searchParams.get('redirect') ?? '/admin/dashboard'
@@ -40,9 +40,51 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: 'linear-gradient(160deg, #2C1E0F 0%, #4A3320 60%, #6E5234 100%)' }}>
+    <div className="bg-cream-50 rounded-3xl p-8 shadow-2xl">
+      <h2 className="font-serif text-xl text-brand-900 mb-1">Acceso Administrativo</h2>
+      <p className="text-brand-400 text-sm mb-6">Ingresá la contraseña para continuar.</p>
 
+      <form onSubmit={handleLogin} className="space-y-4">
+        <div>
+          <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="••••••••"
+            className="input-field"
+            disabled={loading}
+            autoFocus
+          />
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 text-sm">
+            {error}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-primary w-full py-3.5"
+        >
+          {loading ? 'Ingresando…' : 'Ingresar →'}
+        </button>
+      </form>
+    </div>
+  )
+}
+
+export default function AdminLoginPage() {
+  return (
+    <main
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{ background: 'linear-gradient(160deg, #2C1E0F 0%, #4A3320 60%, #6E5234 100%)' }}
+    >
       <div className="w-full max-w-sm animate-fade-in-up">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -51,46 +93,20 @@ export default function AdminLoginPage() {
           <div className="w-12 h-px bg-brand-500 mx-auto mt-3" />
         </div>
 
-        {/* Card */}
-        <div className="bg-cream-50 rounded-3xl p-8 shadow-2xl">
-          <h2 className="font-serif text-xl text-brand-900 mb-1">Acceso Administrativo</h2>
-          <p className="text-brand-400 text-sm mb-6">Ingresá la contraseña para continuar.</p>
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="input-field"
-                disabled={loading}
-                autoFocus
-              />
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 text-sm">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full py-3.5"
-            >
-              {loading ? 'Ingresando…' : 'Ingresar →'}
-            </button>
-          </form>
-        </div>
+        {/* Formulario envuelto en Suspense (requerido por useSearchParams) */}
+        <Suspense fallback={
+          <div className="bg-cream-50 rounded-3xl p-8 shadow-2xl">
+            <div className="h-32 animate-pulse bg-brand-50 rounded-xl" />
+          </div>
+        }>
+          <AdminLoginForm />
+        </Suspense>
 
         <p className="text-brand-500 text-xs text-center mt-6">
-          ← <a href="/" className="hover:text-brand-300 transition-colors">Volver al sitio de clientes</a>
+          ←{' '}
+          <a href="/" className="hover:text-brand-300 transition-colors">
+            Volver al sitio de clientes
+          </a>
         </p>
       </div>
     </main>

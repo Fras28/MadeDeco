@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
+import Icon from '@/components/Icons'
 
 const links = [
-  { href: '/admin/dashboard', label: 'Dashboard',   icon: '📊' },
-  { href: '/admin/customers', label: 'Clientes',    icon: '👥' },
-  { href: '/admin/scan',      label: 'Escanear QR', icon: '📷' },
-  { href: '/admin/settings',  label: 'Config',      icon: '⚙️' },
+  { href: '/admin/dashboard', label: 'Dashboard',   Icon: Icon.ChartBar },
+  { href: '/admin/customers', label: 'Clientes',    Icon: Icon.Users    },
+  { href: '/admin/scan',      label: 'Escanear QR', Icon: Icon.Camera   },
+  { href: '/admin/settings',  label: 'Config',      Icon: Icon.Cog      },
 ]
 
 export default function AdminNav() {
@@ -24,15 +26,19 @@ export default function AdminNav() {
     <nav className="bg-brand-950 text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-5xl mx-auto px-4 flex items-center justify-between h-14">
         {/* Logo */}
-        <Link href="/admin/dashboard" className="font-serif text-lg text-cream-100 flex items-center gap-2 shrink-0">
-          <span className="text-brand-400">✦</span>
-          <span className="hidden sm:inline">Madedeco</span>
-          <span className="sm:hidden">Admin</span>
+        <Link href="/admin/dashboard" className="shrink-0 flex items-center">
+          <Image
+            src="/LogoMadeDeco.webp"
+            alt="Made Deco"
+            width={110}
+            height={43}
+            className="brightness-0 invert opacity-90"
+          />
         </Link>
 
         {/* Links */}
         <div className="flex items-center gap-0.5 overflow-x-auto">
-          {links.map(({ href, label, icon }) => {
+          {links.map(({ href, label, Icon: I }) => {
             const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(href))
             return (
               <Link
@@ -44,7 +50,7 @@ export default function AdminNav() {
                     : 'text-brand-300 hover:text-white hover:bg-brand-800'
                 }`}
               >
-                <span>{icon}</span>
+                <I className="w-4 h-4" />
                 <span className="hidden md:inline">{label}</span>
               </Link>
             )
@@ -54,10 +60,10 @@ export default function AdminNav() {
 
           <button
             onClick={handleLogout}
-            className="px-2.5 py-1.5 rounded-lg text-sm text-brand-400 hover:text-red-400 transition-colors whitespace-nowrap"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm text-brand-400 hover:text-red-400 transition-colors whitespace-nowrap"
           >
+            <Icon.LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Salir</span>
-            <span className="sm:hidden">✕</span>
           </button>
         </div>
       </div>

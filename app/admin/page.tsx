@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Image from 'next/image'
 
 function AdminLoginForm() {
   const router       = useRouter()
@@ -46,7 +47,7 @@ function AdminLoginForm() {
 
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
+          <label className="block font-label text-brand-700 mb-1.5">
             Contraseña
           </label>
           <input
@@ -88,9 +89,19 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm animate-fade-in-up">
         {/* Logo */}
         <div className="text-center mb-8">
-          <p className="text-brand-300 text-xs tracking-[0.3em] uppercase mb-2">Panel de</p>
-          <h1 className="font-serif text-4xl text-cream-50 font-light">Madedeco</h1>
-          <div className="w-12 h-px bg-brand-500 mx-auto mt-3" />
+          <div className="bg-cream-50 rounded-2xl px-6 py-4 inline-block shadow-lg">
+            <Image
+              src="/LogoMadeDeco.webp"
+              alt="Made Deco"
+              width={200}
+              height={78}
+              className="mx-auto"
+              priority
+            />
+          </div>
+          <p className="font-accent text-brand-400 text-lg mt-4">
+            Panel Administrativo
+          </p>
         </div>
 
         {/* Formulario envuelto en Suspense (requerido por useSearchParams) */}

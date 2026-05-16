@@ -30,8 +30,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-        sans:  ['Inter', 'system-ui', 'sans-serif'],
+        serif:  ['Cormorant Garamond', 'Georgia', 'serif'],
+        sans:   ['Raleway', 'system-ui', 'sans-serif'],
+        accent: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
       borderRadius: {
         'xl':  '1rem',

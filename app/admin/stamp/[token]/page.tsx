@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import AdminNav from '@/components/AdminNav'
 import Link from 'next/link'
 import DachshundIcon from '@/components/DachshundIcon'
+import Icon from '@/components/Icons'
 
 interface CustomerData {
   name:               string
@@ -93,7 +94,7 @@ export default function StampPage() {
       <div className="min-h-screen bg-cream-50">
         <AdminNav />
         <div className="max-w-lg mx-auto px-4 py-16 text-center">
-          <p className="text-5xl mb-4">🔍</p>
+          <Icon.Search className="w-14 h-14 text-brand-200 mx-auto mb-4" />
           <h2 className="font-serif text-2xl text-brand-900 mb-2">Cliente no encontrado</h2>
           <p className="text-brand-500 mb-6">{error}</p>
           <Link href="/admin/scan" className="btn-primary">← Volver al escáner</Link>
@@ -110,12 +111,10 @@ export default function StampPage() {
 
       <div className="max-w-xl mx-auto px-4 py-8">
 
-        {/* Back */}
         <Link href="/admin/customers" className="text-brand-400 text-sm hover:text-brand-700 mb-5 inline-flex items-center gap-1">
           ← Clientes
         </Link>
 
-        {/* Tarjeta */}
         <div className="loyalty-card mt-3 mb-4">
           <div className="px-6 pt-6 pb-3 flex items-center justify-between">
             <div>
@@ -126,7 +125,7 @@ export default function StampPage() {
               </p>
             </div>
             {customer.completed
-              ? <span className="badge-completed">🎉 Completa</span>
+              ? <span className="badge-completed">Completa</span>
               : <span className="badge-progress">{customer.stamps}/{customer.totalSlots}</span>
             }
           </div>
@@ -169,41 +168,51 @@ export default function StampPage() {
           {customer.completed && (
             <div className="mx-6 mb-5 p-4 rounded-2xl text-center"
               style={{ background: 'linear-gradient(135deg, #9E7E5C, #B89670)' }}>
-              <p className="text-white font-serif text-xl">🎁 {customer.discountPercentage}% de descuento disponible</p>
+              <div className="flex items-center justify-center gap-2 mb-0.5">
+                <Icon.Gift className="w-5 h-5 text-white" />
+                <p className="text-white font-serif text-xl">{customer.discountPercentage}% de descuento disponible</p>
+              </div>
               <p className="text-white/70 text-xs mt-0.5">Aplicá el descuento y luego presioná "Reiniciar tarjeta"</p>
             </div>
           )}
         </div>
 
-        {/* Feedback */}
         {feedback && (
-          <div className={`mb-4 rounded-2xl px-5 py-4 text-sm font-medium ${
+          <div className={`mb-4 rounded-2xl px-5 py-4 text-sm font-medium flex items-center gap-2 ${
             feedback.type === 'success'
               ? 'bg-green-50 border border-green-200 text-green-800'
               : 'bg-red-50 border border-red-200 text-red-700'
           }`}>
-            {feedback.type === 'success' ? '✅ ' : '❌ '}{feedback.msg}
+            {feedback.type === 'success'
+              ? <Icon.CheckCircle className="w-4 h-4 shrink-0" />
+              : <Icon.XCircle className="w-4 h-4 shrink-0" />
+            }
+            {feedback.msg}
           </div>
         )}
 
-        {/* Acciones */}
         <div className="space-y-3 mb-6">
           {!customer.completed ? (
-            <button onClick={handleStamp} disabled={stamping} className="btn-primary w-full py-4 text-base">
-              {stamping ? '⏳ Agregando sello…' : `🔖 Sumar sello (${customer.stamps} → ${customer.stamps + 1})`}
+            <button onClick={handleStamp} disabled={stamping} className="btn-primary w-full py-4 text-base flex items-center justify-center gap-2">
+              {stamping ? (
+                <><Icon.Clock className="w-5 h-5 animate-spin" /> Agregando sello…</>
+              ) : (
+                <><Icon.Tag className="w-5 h-5" /> Sumar sello ({customer.stamps} → {customer.stamps + 1})</>
+              )}
             </button>
           ) : (
-            <button onClick={handleReset} disabled={resetting} className="btn-gold w-full py-4 text-base">
-              {resetting ? 'Reiniciando…' : '✅ Descuento aplicado → Reiniciar tarjeta'}
+            <button onClick={handleReset} disabled={resetting} className="btn-gold w-full py-4 text-base flex items-center justify-center gap-2">
+              <Icon.CheckCircle className="w-5 h-5" />
+              {resetting ? 'Reiniciando…' : 'Descuento aplicado → Reiniciar tarjeta'}
             </button>
           )}
 
-          <Link href="/admin/scan" className="btn-secondary w-full py-3 text-center block">
-            📷 Escanear otro cliente
+          <Link href="/admin/scan" className="btn-secondary w-full py-3 text-center flex items-center justify-center gap-2">
+            <Icon.Camera className="w-4 h-4" />
+            Escanear otro cliente
           </Link>
         </div>
 
-        {/* Historial de sellos */}
         {customer.stampLogs.length > 0 && (
           <div className="bg-white rounded-2xl border border-brand-100 overflow-hidden">
             <div className="px-5 py-4 border-b border-brand-50 flex items-center justify-between">

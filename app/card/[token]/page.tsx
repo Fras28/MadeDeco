@@ -3,8 +3,10 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import QRCode from 'qrcode'
 import DachshundIcon from '@/components/DachshundIcon'
+import Icon from '@/components/Icons'
 
 interface CardData {
   name:               string
@@ -33,7 +35,6 @@ export default function CardPage() {
       .then(data => {
         if (data.error) { setError(data.error); return }
         setCard(data)
-        // Generar QR con la URL de la tarjeta (para que el admin la escanee)
         const cardUrl = `${window.location.origin}/admin/stamp/${token}`
         QRCode.toDataURL(cardUrl, {
           width:  280,
@@ -69,7 +70,7 @@ export default function CardPage() {
       <div className="min-h-screen flex items-center justify-center px-4"
         style={{ background: 'linear-gradient(160deg, #FAF7F3 0%, #EDE5D8 100%)' }}>
         <div className="text-center max-w-sm">
-          <p className="text-5xl mb-4">🔍</p>
+          <Icon.Search className="w-14 h-14 text-brand-300 mx-auto mb-4" />
           <h2 className="font-serif text-2xl text-brand-900 mb-2">Tarjeta no encontrada</h2>
           <p className="text-brand-500 mb-6">{error || 'Este enlace no es válido.'}</p>
           <Link href="/" className="btn-primary">Crear mi tarjeta</Link>
@@ -85,19 +86,23 @@ export default function CardPage() {
       style={{ background: 'linear-gradient(160deg, #FAF7F3 0%, #EDE5D8 100%)' }}>
 
       {/* Header */}
-      <div className="text-center mb-8 animate-fade-in-up">
-        <p className="text-brand-500 text-xs tracking-[0.2em] uppercase font-medium mb-1">
-          Madedeco
-        </p>
-        <h1 className="font-serif text-3xl text-brand-900 font-light">
+      <div className="text-center mb-6 animate-fade-in-up">
+        <Image
+          src="/LogoMadeDeco.webp"
+          alt="Made Deco"
+          width={200}
+          height={78}
+          className="mx-auto mb-3"
+          priority
+        />
+        <p className="font-accent text-brand-400 text-lg">
           Tu Tarjeta Fiel
-        </h1>
+        </p>
       </div>
 
       {/* Tarjeta principal */}
       <div className="loyalty-card w-full max-w-sm animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
 
-        {/* Header de la tarjeta */}
         <div className="px-6 pt-7 pb-5">
           <div className="flex items-center justify-between mb-1">
             <div>
@@ -105,7 +110,7 @@ export default function CardPage() {
               <p className="text-brand-400 text-xs">{card.email}</p>
             </div>
             {card.completed ? (
-              <span className="badge-completed">🎉 Completa</span>
+              <span className="badge-completed">Completa</span>
             ) : (
               <span className="badge-progress">
                 {card.stamps}/{card.totalSlots}
@@ -113,11 +118,10 @@ export default function CardPage() {
             )}
           </div>
 
-          {/* Barra de progreso */}
           <div className="mt-4 mb-1">
-            <div className="flex justify-between text-xs text-brand-400 mb-1.5">
-              <span>Progreso</span>
-              <span>{progress}%</span>
+            <div className="flex justify-between mb-1.5">
+              <span className="font-label text-brand-400">Progreso</span>
+              <span className="font-label text-brand-400">{progress}%</span>
             </div>
             <div className="h-1.5 bg-brand-100 rounded-full overflow-hidden">
               <div
@@ -128,19 +132,17 @@ export default function CardPage() {
           </div>
         </div>
 
-        {/* Separador decorativo */}
         <div className="flex items-center px-6 mb-5">
           <div className="flex-1 h-px bg-brand-100" />
           <div className="mx-3 text-brand-300 text-xs">✦</div>
           <div className="flex-1 h-px bg-brand-100" />
         </div>
 
-        {/* Grid de sellos */}
         <div className="px-6 pb-6">
           <div className="grid grid-cols-5 gap-3 justify-items-center">
             {Array.from({ length: card.totalSlots }).map((_, i) => {
               const isFilled  = i < card.stamps
-              const isInitial = i < 2 // los 2 de bienvenida
+              const isInitial = i < 2
               return (
                 <div
                   key={i}
@@ -159,7 +161,6 @@ export default function CardPage() {
             })}
           </div>
 
-          {/* Leyenda */}
           <div className="flex items-center justify-center gap-4 mt-4 text-xs text-brand-400">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-brand-100 border border-brand-300" />
@@ -176,11 +177,10 @@ export default function CardPage() {
           </div>
         </div>
 
-        {/* Banner descuento */}
         {card.completed ? (
           <div className="mx-6 mb-6 p-4 rounded-2xl text-center"
             style={{ background: 'linear-gradient(135deg, #9E7E5C, #B89670)' }}>
-            <p className="text-white font-serif text-2xl mb-0.5">¡{card.discountPercentage}% OFF!</p>
+            <p className="text-white font-serif text-2xl mb-0.5">{card.discountPercentage}% OFF</p>
             <p className="text-white/80 text-xs">
               Presentá esta tarjeta en tu próxima compra
             </p>
@@ -199,7 +199,7 @@ export default function CardPage() {
       {/* QR Code */}
       <div className="mt-6 w-full max-w-sm animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
         <div className="bg-white rounded-3xl shadow-lg p-6 border border-brand-100 text-center">
-          <p className="text-brand-500 text-xs tracking-widest uppercase font-medium mb-4">
+          <p className="font-label text-brand-400 mb-4">
             Tu código QR
           </p>
           {qrUrl ? (
@@ -216,13 +216,16 @@ export default function CardPage() {
             Mostrá este QR en el local para que sumen tu sello automáticamente
           </p>
 
-          <button onClick={handleCopyLink} className="btn-secondary w-full mt-4 text-xs">
-            {copied ? '✓ Enlace copiado' : '🔗 Compartir mi tarjeta'}
+          <button onClick={handleCopyLink} className="btn-secondary w-full mt-4 text-xs flex items-center justify-center gap-2">
+            {copied ? (
+              <><Icon.CheckCircle className="w-4 h-4" /> Enlace copiado</>
+            ) : (
+              <><Icon.QrCode className="w-4 h-4" /> Compartir mi tarjeta</>
+            )}
           </button>
         </div>
       </div>
 
-      {/* Back */}
       <Link
         href="/"
         className="mt-6 text-brand-400 text-xs hover:text-brand-600 transition-colors"

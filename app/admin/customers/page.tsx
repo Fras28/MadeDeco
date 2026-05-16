@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import AdminNav from '@/components/AdminNav'
 import Link from 'next/link'
 import DachshundIcon from '@/components/DachshundIcon'
+import Icon from '@/components/Icons'
 
 interface Customer {
   id:           string
@@ -37,7 +38,6 @@ export default function CustomersPage() {
   const [resetting,        setResetting]        = useState(false)
   const [detailFeedback,   setDetailFeedback]   = useState<{ type: 'success'|'error'; msg: string } | null>(null)
 
-  // Debounce search
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 380)
     return () => clearTimeout(t)
@@ -57,7 +57,6 @@ export default function CustomersPage() {
   useEffect(() => { fetchCustomers() }, [fetchCustomers])
   useEffect(() => { setPage(1) }, [debouncedSearch])
 
-  // ── Abrir detalle de cliente ──
   async function openDetail(token: string) {
     setDetailLoading(true)
     setDetailFeedback(null)
@@ -68,7 +67,6 @@ export default function CustomersPage() {
     setDetailLoading(false)
   }
 
-  // ── Sumar sello desde el panel de detalle ──
   async function handleStamp() {
     if (!selected || stamping) return
     setStamping(true)
@@ -88,7 +86,6 @@ export default function CustomersPage() {
     }
   }
 
-  // ── Resetear tarjeta ──
   async function handleReset() {
     if (!selected || resetting) return
     if (!confirm(`¿Aplicar el descuento y reiniciar la tarjeta de ${selected.name}?`)) return
@@ -117,10 +114,9 @@ export default function CustomersPage() {
 
       <div className="max-w-6xl mx-auto px-4 py-8 flex gap-6">
 
-        {/* ══ Lista de clientes ══ */}
+        {/* ── Lista ── */}
         <div className={`flex-1 min-w-0 transition-all duration-300 ${selected ? 'hidden md:block md:max-w-sm lg:max-w-md' : ''}`}>
 
-          {/* Header */}
           <div className="flex items-center justify-between mb-5">
             <div>
               <h1 className="font-serif text-3xl text-brand-900">Clientes</h1>
@@ -130,9 +126,8 @@ export default function CustomersPage() {
             </div>
           </div>
 
-          {/* Búsqueda */}
           <div className="relative mb-4">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-300 text-sm">🔍</span>
+            <Icon.Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-300" />
             <input
               type="text"
               value={search}
@@ -142,13 +137,12 @@ export default function CustomersPage() {
             />
           </div>
 
-          {/* Lista */}
           <div className="bg-white rounded-2xl border border-brand-100 overflow-hidden">
             {loading ? (
               <div className="p-8 text-center text-brand-400 text-sm">Cargando…</div>
             ) : customers.length === 0 ? (
               <div className="p-12 text-center">
-                <p className="text-4xl mb-3">👥</p>
+                <Icon.Users className="w-10 h-10 text-brand-200 mx-auto mb-3" />
                 <p className="text-brand-400 text-sm">Sin resultados.</p>
               </div>
             ) : (
@@ -161,18 +155,15 @@ export default function CustomersPage() {
                       selected?.token === c.token ? 'bg-cream-100 border-l-2 border-brand-500' : ''
                     }`}
                   >
-                    {/* Avatar */}
                     <div className="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-medium text-sm shrink-0">
                       {c.name.charAt(0).toUpperCase()}
                     </div>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-brand-900 text-sm truncate">{c.name}</p>
                       <p className="text-brand-400 text-xs truncate">{c.email}</p>
                     </div>
 
-                    {/* Sellos mini */}
                     <div className="shrink-0 flex flex-col items-end gap-1">
                       <div className="flex gap-0.5">
                         {Array.from({ length: 10 }).map((_, i) => (
@@ -180,7 +171,10 @@ export default function CustomersPage() {
                         ))}
                       </div>
                       {c.completed && (
-                        <span className="text-xs text-green-600 font-medium">🎉 Completa</span>
+                        <span className="text-xs text-green-600 font-medium flex items-center gap-0.5">
+                          <Icon.Sparkles className="w-3 h-3" />
+                          Completa
+                        </span>
                       )}
                     </div>
                   </button>
@@ -189,7 +183,6 @@ export default function CustomersPage() {
             )}
           </div>
 
-          {/* Paginación */}
           {pagination && pagination.pages > 1 && (
             <div className="flex justify-center gap-2 mt-4">
               {Array.from({ length: pagination.pages }).map((_, i) => (
@@ -209,11 +202,10 @@ export default function CustomersPage() {
           )}
         </div>
 
-        {/* ══ Panel de detalle ══ */}
+        {/* ── Panel de detalle ── */}
         {(detailLoading || selected) && (
           <div className="flex-1 md:flex-none md:w-96 lg:w-[420px]">
 
-            {/* Botón cerrar en mobile */}
             <div className="flex items-center gap-3 mb-4 md:hidden">
               <button
                 onClick={() => setSelected(null)}
@@ -230,9 +222,7 @@ export default function CustomersPage() {
             {selected && !detailLoading && (
               <div className="space-y-4 sticky top-20">
 
-                {/* Tarjeta del cliente */}
                 <div className="loyalty-card">
-                  {/* Header */}
                   <div className="px-6 pt-6 pb-3 flex items-center justify-between">
                     <div>
                       <p className="font-serif text-xl text-brand-900">{selected.name}</p>
@@ -243,13 +233,12 @@ export default function CustomersPage() {
                     </div>
                     <div className="text-right">
                       {selected.completed
-                        ? <span className="badge-completed">🎉 Completa</span>
+                        ? <span className="badge-completed">Completa</span>
                         : <span className="badge-progress">{selected.stamps}/{selected.totalSlots}</span>
                       }
                     </div>
                   </div>
 
-                  {/* Progress bar */}
                   <div className="px-6 pb-3">
                     <div className="flex justify-between text-xs text-brand-400 mb-1">
                       <span>Progreso</span>
@@ -263,14 +252,12 @@ export default function CustomersPage() {
                     </div>
                   </div>
 
-                  {/* Separador */}
                   <div className="flex items-center px-6 mb-3">
                     <div className="flex-1 h-px bg-brand-100" />
                     <span className="mx-3 text-brand-300 text-xs">✦</span>
                     <div className="flex-1 h-px bg-brand-100" />
                   </div>
 
-                  {/* Grid de sellos */}
                   <div className="px-6 pb-5">
                     <div className="grid grid-cols-5 gap-2.5 justify-items-center">
                       {Array.from({ length: selected.totalSlots }).map((_, i) => {
@@ -288,53 +275,63 @@ export default function CustomersPage() {
                     </div>
                   </div>
 
-                  {/* Banner descuento */}
                   {selected.completed && (
                     <div className="mx-6 mb-5 p-3 rounded-2xl text-center"
                       style={{ background: 'linear-gradient(135deg, #9E7E5C, #B89670)' }}>
-                      <p className="text-white font-medium">🎁 {selected.discountPercentage}% de descuento disponible</p>
+                      <div className="flex items-center justify-center gap-1.5">
+                        <Icon.Gift className="w-4 h-4 text-white" />
+                        <p className="text-white font-medium">{selected.discountPercentage}% de descuento disponible</p>
+                      </div>
                     </div>
                   )}
                 </div>
 
-                {/* Feedback */}
                 {detailFeedback && (
-                  <div className={`rounded-2xl px-4 py-3 text-sm font-medium ${
+                  <div className={`rounded-2xl px-4 py-3 text-sm font-medium flex items-center gap-2 ${
                     detailFeedback.type === 'success'
                       ? 'bg-green-50 border border-green-200 text-green-800'
                       : 'bg-red-50 border border-red-200 text-red-700'
                   }`}>
-                    {detailFeedback.type === 'success' ? '✅ ' : '❌ '}{detailFeedback.msg}
+                    {detailFeedback.type === 'success'
+                      ? <Icon.CheckCircle className="w-4 h-4 shrink-0" />
+                      : <Icon.XCircle className="w-4 h-4 shrink-0" />
+                    }
+                    {detailFeedback.msg}
                   </div>
                 )}
 
-                {/* Acciones */}
                 <div className="bg-white rounded-2xl border border-brand-100 p-4 space-y-2.5">
-                  <p className="text-xs font-medium text-brand-500 uppercase tracking-wide mb-1">Acciones</p>
+                  <p className="font-label text-brand-400 mb-1">Acciones</p>
 
                   {!selected.completed ? (
                     <button
                       onClick={handleStamp}
                       disabled={stamping}
-                      className="btn-primary w-full py-3"
+                      className="btn-primary w-full py-3 flex items-center justify-center gap-2"
                     >
-                      {stamping ? '⏳ Agregando…' : `🔖 Sumar sello (${selected.stamps} → ${selected.stamps + 1})`}
+                      {stamping ? (
+                        <><Icon.Clock className="w-4 h-4 animate-spin" /> Agregando…</>
+                      ) : (
+                        <><Icon.Tag className="w-4 h-4" /> Sumar sello ({selected.stamps} → {selected.stamps + 1})</>
+                      )}
                     </button>
                   ) : (
                     <button
                       onClick={handleReset}
                       disabled={resetting}
-                      className="btn-gold w-full py-3"
+                      className="btn-gold w-full py-3 flex items-center justify-center gap-2"
                     >
-                      {resetting ? 'Reiniciando…' : '✅ Descuento aplicado → Reiniciar tarjeta'}
+                      <Icon.CheckCircle className="w-4 h-4" />
+                      {resetting ? 'Reiniciando…' : 'Descuento aplicado → Reiniciar tarjeta'}
                     </button>
                   )}
 
                   <Link
                     href={`/admin/scan`}
-                    className="btn-secondary w-full py-2.5 text-sm text-center block"
+                    className="btn-secondary w-full py-2.5 text-sm text-center flex items-center justify-center gap-2"
                   >
-                    📷 Ir al escáner QR
+                    <Icon.Camera className="w-4 h-4" />
+                    Ir al escáner QR
                   </Link>
 
                   <a
@@ -347,7 +344,6 @@ export default function CustomersPage() {
                   </a>
                 </div>
 
-                {/* Historial de sellos */}
                 {selected.stampLogs.length > 0 && (
                   <div className="bg-white rounded-2xl border border-brand-100 overflow-hidden">
                     <div className="px-5 py-3 border-b border-brand-50">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import AdminNav from '@/components/AdminNav'
+import Icon from '@/components/Icons'
 
 interface Settings {
   businessName:       string
@@ -75,7 +76,7 @@ export default function SettingsPage() {
             <div className="bg-white rounded-3xl border border-brand-100 p-6">
               <h2 className="font-serif text-lg text-brand-900 mb-4">Negocio</h2>
               <div>
-                <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
+                <label className="block font-label text-brand-700 mb-1.5">
                   Nombre del comercio
                 </label>
                 <input
@@ -92,14 +93,13 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            {/* Configuración de la tarjeta */}
+            {/* Tarjeta de sellos */}
             <div className="bg-white rounded-3xl border border-brand-100 p-6">
               <h2 className="font-serif text-lg text-brand-900 mb-4">Tarjeta de sellos</h2>
               <div className="space-y-5">
 
-                {/* Sellos totales */}
                 <div>
-                  <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
+                  <label className="block font-label text-brand-700 mb-1.5">
                     Cantidad total de sellos
                   </label>
                   <div className="flex items-center gap-4">
@@ -119,9 +119,8 @@ export default function SettingsPage() {
                   </p>
                 </div>
 
-                {/* Sellos de bienvenida */}
                 <div>
-                  <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
+                  <label className="block font-label text-brand-700 mb-1.5">
                     Sellos de bienvenida
                   </label>
                   <div className="flex items-center gap-4">
@@ -157,7 +156,7 @@ export default function SettingsPage() {
                         }`}
                       >
                         {i < settings.initialStamps && (
-                          <span className="text-brand-600 text-xs">★</span>
+                          <Icon.Tag className="w-3 h-3 text-brand-600" strokeWidth={2} />
                         )}
                       </div>
                     ))}
@@ -173,7 +172,7 @@ export default function SettingsPage() {
             <div className="bg-white rounded-3xl border border-brand-100 p-6">
               <h2 className="font-serif text-lg text-brand-900 mb-4">Descuento</h2>
               <div>
-                <label className="block text-xs font-medium text-brand-700 mb-1.5 uppercase tracking-wide">
+                <label className="block font-label text-brand-700 mb-1.5">
                   Porcentaje de descuento al completar la tarjeta
                 </label>
                 <div className="flex items-center gap-4">
@@ -210,24 +209,27 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            {/* Feedback */}
             {feedback && (
-              <div className={`rounded-2xl px-5 py-4 text-sm font-medium ${
+              <div className={`rounded-2xl px-5 py-4 text-sm font-medium flex items-center gap-2 ${
                 feedback.type === 'success'
                   ? 'bg-green-50 border border-green-200 text-green-800'
                   : 'bg-red-50 border border-red-200 text-red-700'
               }`}>
-                {feedback.type === 'success' ? '✅ ' : '❌ '}{feedback.msg}
+                {feedback.type === 'success'
+                  ? <Icon.CheckCircle className="w-4 h-4 shrink-0" />
+                  : <Icon.XCircle className="w-4 h-4 shrink-0" />
+                }
+                {feedback.msg}
               </div>
             )}
 
-            {/* Guardar */}
             <button
               type="submit"
               disabled={saving}
-              className="btn-primary w-full py-4 text-base"
+              className="btn-primary w-full py-4 text-base flex items-center justify-center gap-2"
             >
-              {saving ? 'Guardando…' : '💾 Guardar configuración'}
+              <Icon.ArrowDown className="w-5 h-5" />
+              {saving ? 'Guardando…' : 'Guardar configuración'}
             </button>
           </form>
         )}

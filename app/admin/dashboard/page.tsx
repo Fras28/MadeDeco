@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import AdminNav from '@/components/AdminNav'
 import Link from 'next/link'
+import Icon from '@/components/Icons'
 
 interface Stats {
   totalCustomers:     number
@@ -10,6 +11,13 @@ interface Stats {
   totalStamps:        number
   discountPercentage: number
   recentStamps:       { id: string; customerName: string; createdAt: string }[]
+}
+
+type StatCard = {
+  label: string
+  value: string | number
+  Icon:  React.FC<{ className?: string }>
+  color: string
 }
 
 export default function DashboardPage() {
@@ -23,12 +31,12 @@ export default function DashboardPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  const cards = stats
+  const cards: StatCard[] = stats
     ? [
-        { label: 'Clientes registrados', value: stats.totalCustomers,     icon: '👥', color: 'bg-blue-50   border-blue-200   text-blue-700' },
-        { label: 'Tarjetas completas',   value: stats.completedCards,      icon: '🎉', color: 'bg-green-50  border-green-200  text-green-700' },
-        { label: 'Sellos otorgados',      value: stats.totalStamps,         icon: '🔖', color: 'bg-brand-50  border-brand-200  text-brand-700' },
-        { label: 'Descuento activo',      value: `${stats.discountPercentage}%`, icon: '🎁', color: 'bg-purple-50 border-purple-200 text-purple-700' },
+        { label: 'Clientes registrados', value: stats.totalCustomers,          Icon: Icon.Users,    color: 'bg-blue-50   border-blue-200   text-blue-700'   },
+        { label: 'Tarjetas completas',   value: stats.completedCards,           Icon: Icon.Sparkles, color: 'bg-green-50  border-green-200  text-green-700'  },
+        { label: 'Sellos otorgados',     value: stats.totalStamps,              Icon: Icon.Tag,      color: 'bg-brand-50  border-brand-200  text-brand-700'  },
+        { label: 'Descuento activo',     value: `${stats.discountPercentage}%`, Icon: Icon.Gift,     color: 'bg-purple-50 border-purple-200 text-purple-700' },
       ]
     : []
 
@@ -52,9 +60,9 @@ export default function DashboardPage() {
           <>
             {/* Stat cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              {cards.map(({ label, value, icon, color }) => (
+              {cards.map(({ label, value, Icon: I, color }) => (
                 <div key={label} className={`rounded-2xl p-5 border ${color} bg-opacity-50`}>
-                  <div className="text-2xl mb-2">{icon}</div>
+                  <I className="w-5 h-5 mb-2" />
                   <div className="text-2xl font-semibold">{value}</div>
                   <div className="text-xs opacity-80 mt-0.5">{label}</div>
                 </div>
@@ -67,24 +75,24 @@ export default function DashboardPage() {
                 href="/admin/scan"
                 className="flex items-center gap-4 bg-brand-900 text-white rounded-2xl p-5 hover:bg-brand-800 transition-colors group"
               >
-                <span className="text-3xl">📷</span>
+                <Icon.Camera className="w-7 h-7 text-brand-300 shrink-0" />
                 <div>
                   <p className="font-semibold">Escanear QR</p>
                   <p className="text-brand-300 text-xs">Sumá un sello al cliente</p>
                 </div>
-                <span className="ml-auto text-brand-400 group-hover:translate-x-1 transition-transform">→</span>
+                <Icon.ArrowRight className="ml-auto w-4 h-4 text-brand-400 group-hover:translate-x-1 transition-transform" />
               </Link>
 
               <Link
                 href="/admin/customers"
                 className="flex items-center gap-4 bg-white border border-brand-200 rounded-2xl p-5 hover:border-brand-400 transition-colors group"
               >
-                <span className="text-3xl">👥</span>
+                <Icon.Users className="w-7 h-7 text-brand-400 shrink-0" />
                 <div>
                   <p className="font-semibold text-brand-900">Ver clientes</p>
                   <p className="text-brand-400 text-xs">Lista completa de tarjetas</p>
                 </div>
-                <span className="ml-auto text-brand-300 group-hover:translate-x-1 transition-transform">→</span>
+                <Icon.ArrowRight className="ml-auto w-4 h-4 text-brand-300 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
@@ -97,8 +105,8 @@ export default function DashboardPage() {
                 <div className="divide-y divide-brand-50">
                   {stats.recentStamps.map((s) => (
                     <div key={s.id} className="flex items-center gap-3 px-6 py-3">
-                      <div className="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-white text-xs">
-                        🔖
+                      <div className="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center shrink-0">
+                        <Icon.Tag className="w-4 h-4 text-white" />
                       </div>
                       <div>
                         <p className="text-sm font-medium text-brand-900">{s.customerName}</p>

@@ -9,6 +9,7 @@ const links = [
   { href: '/admin/dashboard', label: 'Dashboard',   Icon: Icon.ChartBar },
   { href: '/admin/customers', label: 'Clientes',    Icon: Icon.Users    },
   { href: '/admin/scan',      label: 'Escanear QR', Icon: Icon.Camera   },
+  { href: '/admin/qr',        label: 'Mostrador',   Icon: Icon.QrCode   },
   { href: '/admin/settings',  label: 'Config',      Icon: Icon.Cog      },
 ]
 

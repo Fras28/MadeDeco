@@ -14,7 +14,7 @@ export default async function AdminLayout({
   // La página de login (/admin) se maneja por separado;
   // las subpáginas son protegidas por el middleware.
   return (
-    <div className="min-h-screen bg-cream-100">
+    <div className="min-h-screen bg-cream-100 pb-20 md:pb-0">
       {children}
     </div>
   )

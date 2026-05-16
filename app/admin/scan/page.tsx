@@ -455,7 +455,7 @@ export default function ScanPage() {
                 Buscar →
               </button>
             </form>
-            {message && scanState !== 'stamped' && (
+            {message && (
               <p className="text-red-600 text-xs mt-2">{message}</p>
             )}
           </div>

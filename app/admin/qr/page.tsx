@@ -6,8 +6,9 @@ import Icon from '@/components/Icons'
 import QRCode from 'qrcode'
 
 export default function QrMostradorPage() {
-  const canvasRef    = useRef<HTMLCanvasElement>(null)
-  const previewRef   = useRef<HTMLCanvasElement>(null)
+  const canvasRef      = useRef<HTMLCanvasElement>(null)
+  const previewRef     = useRef<HTMLCanvasElement>(null)
+  const previewWrapRef = useRef<HTMLDivElement>(null)
   const [siteUrl,    setSiteUrl]    = useState('')
   const [qrReady,    setQrReady]    = useState(false)
   const [copied,     setCopied]     = useState(false)
@@ -195,12 +196,14 @@ export default function QrMostradorPage() {
       downloadCanvas.getContext('2d')!.drawImage(offscreen, 0, 0)
     }
 
-    // Preview escalado (para mostrar en pantalla)
-    const preview = previewRef.current
+    // Preview escalado — usa el ancho del contenedor padre (el canvas puede estar oculto)
+    const preview   = previewRef.current
+    const wrapEl    = previewWrapRef.current
+    const availW    = wrapEl ? wrapEl.offsetWidth : 500
+    const scale     = Math.min(availW / W, 1)
     if (preview) {
-      const scale = Math.min(preview.offsetWidth / W, 1)
-      preview.width  = W * scale
-      preview.height = H * scale
+      preview.width  = Math.round(W * scale)
+      preview.height = Math.round(H * scale)
       const pCtx = preview.getContext('2d')!
       pCtx.scale(scale, scale)
       pCtx.drawImage(offscreen, 0, 0)
@@ -256,8 +259,11 @@ export default function QrMostradorPage() {
               </div>
 
               {/* Canvas preview */}
-              <div className="relative w-full rounded-2xl overflow-hidden bg-cream-100 flex items-center justify-center"
-                style={{ minHeight: 400 }}>
+              <div
+                ref={previewWrapRef}
+                className="relative w-full rounded-2xl overflow-hidden bg-cream-100 flex items-center justify-center"
+                style={{ minHeight: 400 }}
+              >
                 {rendering && (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-cream-100 z-10">
                     <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin mb-3" />
@@ -267,7 +273,6 @@ export default function QrMostradorPage() {
                 <canvas
                   ref={previewRef}
                   className="w-full h-auto rounded-xl"
-                  style={{ display: rendering ? 'none' : 'block' }}
                 />
               </div>
             </div>

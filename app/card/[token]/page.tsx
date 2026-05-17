@@ -398,9 +398,5 @@ export default function CardPage() {
       </div>
     </main>
   )
-}
-  )
-}
-in>
-  )
+
 }

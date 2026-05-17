@@ -114,7 +114,158 @@
   }
 }
 
-/* Animaciones */
+/* ── Glassmorphism ───────────────────────────────────────── */
+.glass-warm {
+  background: rgba(250, 247, 243, 0.72);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(200, 175, 145, 0.28);
+}
+
+.glass-dark {
+  background: rgba(44, 30, 15, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(158, 126, 92, 0.2);
+}
+
+/* ── Animated mesh gradient background ───────────────────── */
+@keyframes meshMove {
+  0%   { background-position: 0% 0%,   100% 100%, 50% 50%; }
+  33%  { background-position: 30% 50%,  70% 30%,  60% 80%; }
+  66%  { background-position: 70% 20%,  20% 80%,  40% 40%; }
+  100% { background-position: 0% 0%,   100% 100%, 50% 50%; }
+}
+
+.mesh-bg-warm {
+  background:
+    radial-gradient(ellipse 65% 55% at 20% 25%, rgba(196,168,130,0.28) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 65% at 80% 70%, rgba(180,150,110,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 55% 5%,  rgba(235,215,185,0.32) 0%, transparent 55%),
+    linear-gradient(160deg, #FAF7F3 0%, #EDE5D8 100%);
+  background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+  animation: meshMove 14s ease-in-out infinite;
+}
+
+/* ── 3D card wrapper ─────────────────────────────────────── */
+.card-3d-wrapper {
+  perspective: 1100px;
+  perspective-origin: 50% 40%;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+}
+
+/* ── Holographic shimmer ─────────────────────────────────── */
+@keyframes holoShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.holo-card {
+  position: relative;
+  overflow: hidden;
+}
+.holo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    108deg,
+    transparent 35%,
+    rgba(255,255,255,0.22) 43%,
+    rgba(255,255,255,0.40) 50%,
+    rgba(255,255,255,0.22) 57%,
+    transparent 65%
+  );
+  background-size: 250% 100%;
+  animation: holoShimmer 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Gold shimmer text ───────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(90deg, #9E7E5C, #D4B896, #C4A882, #9E7E5C);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: holoShimmer 5s ease-in-out infinite;
+}
+
+/* ── Floating particles ──────────────────────────────────── */
+@keyframes particleFloat {
+  0%,100% { transform: translateY(0)    translateX(0)   scale(1);   opacity: 0.35; }
+  25%      { transform: translateY(-18px) translateX(8px)  scale(1.1); opacity: 0.6;  }
+  50%      { transform: translateY(-8px)  translateX(-8px) scale(0.9); opacity: 0.45; }
+  75%      { transform: translateY(-22px) translateX(4px)  scale(1);   opacity: 0.55; }
+}
+
+/* ── Reveal animations ───────────────────────────────────── */
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes revealScale {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+.animate-reveal-up {
+  opacity: 0;
+  animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-reveal-scale {
+  opacity: 0;
+  animation: revealScale 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger delays */
+.delay-0   { animation-delay: 0s;    }
+.delay-100 { animation-delay: 0.10s; }
+.delay-200 { animation-delay: 0.20s; }
+.delay-300 { animation-delay: 0.30s; }
+.delay-400 { animation-delay: 0.40s; }
+.delay-500 { animation-delay: 0.50s; }
+.delay-600 { animation-delay: 0.60s; }
+.delay-700 { animation-delay: 0.70s; }
+
+/* ── Floating card animation ─────────────────────────────── */
+@keyframes floatCard {
+  0%,100% { transform: translateY(0px)  rotate(0deg);  }
+  33%      { transform: translateY(-9px) rotate(0.4deg); }
+  66%      { transform: translateY(-4px) rotate(-0.4deg); }
+}
+
+.animate-float-card {
+  animation: floatCard 7s ease-in-out infinite;
+}
+
+/* ── Stamp press (more physical feel) ───────────────────── */
+@keyframes stampPhysical {
+  0%   { transform: scale(1)    translateY(0);    box-shadow: 0 4px 12px rgba(158,126,92,0.25); }
+  25%  { transform: scale(0.90) translateY(3px);  box-shadow: 0 1px  4px rgba(158,126,92,0.15); }
+  60%  { transform: scale(1.10) translateY(-2px); box-shadow: 0 8px 20px rgba(158,126,92,0.40); }
+  100% { transform: scale(1)    translateY(0);    box-shadow: 0 4px 12px rgba(158,126,92,0.25); }
+}
+
+/* ── Confetti pieces ─────────────────────────────────────── */
+@keyframes confettiFall {
+  0%   { transform: translateY(-10vh) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(110vh) rotate(540deg); opacity: 0; }
+}
+
+.confetti-piece {
+  animation: confettiFall linear forwards;
+}
+
+/* ── Animaciones legacy ──────────────────────────────────── */
 @keyframes stampIn {
   0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
   70%  { transform: scale(1.15) rotate(5deg); }
@@ -128,4 +279,20 @@
 
 .animate-fade-in-up {
   animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* ── Custom scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #FAF7F3; }
+::-webkit-scrollbar-thumb { background: #D0B897; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9E7E5C; }
+
+/* ── Reduced-motion safety ───────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .mesh-bg-warm            { animation: none; }
+  .holo-card::after        { animation: none; }
+  .animate-float-card      { animation: none; }
+  .animate-reveal-up,
+  .animate-reveal-scale    { animation: none; opacity: 1; }
+  .confetti-piece          { animation: none; }
 }

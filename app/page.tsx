@@ -302,20 +302,4 @@ export default function HomePage() {
         <div className={`text-center mt-8 space-y-1 ${mounted ? 'animate-reveal-up delay-500' : 'opacity-0'}`}>
           <p className="text-brand-300 text-[11px]">
             © {new Date().getFullYear()} Made Deco · Buenos Aires
-          </p>
-          <p className="text-brand-300 text-[11px]">
-            Desarrollado por{' '}
-            <a
-              href="https://portfolio26-fs.up.railway.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-brand-500 hover:text-brand-700 underline underline-offset-2 transition-colors duration-200"
-            >
-              Franco Selvarolo
-            </a>
-          </p>
-        </div>
-      </div>
-    </main>
-  )
-}
+    

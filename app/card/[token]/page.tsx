@@ -399,8 +399,3 @@ export default function CardPage() {
     </main>
   )
 }
-  )
-}
-in>
-  )
-}
